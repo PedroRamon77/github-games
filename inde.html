@@ -12,6 +12,7 @@
     #menu p a { text-decoration: none; color: black; }
     #upcoming { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score    { color: blue; font-weight: bold; vertical-align: middle; }
+    #record   { color: black; font-weight: bold; vertical-align: middle; }
     #rows     { color: blue; font-weight: bold; vertical-align: middle; }
     #stats    { position: absolute; bottom: 0em; right: 1em; }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
@@ -30,8 +31,9 @@
     <div id="menu">
       <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
       <p><canvas id="upcoming"></canvas></p>
-      <p>score <span id="score">00000</span></p>
-      <p>rows <span id="rows">0</span></p>
+      <p>score: <span id="score">00000</span></p>
+      <p>record: <span id="record">00000</span></p>
+      <p>rows: <span id="rows">0</span></p>
     </div>
     <canvas id="canvas">
       Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
@@ -245,8 +247,7 @@
     function play() { hide('start'); reset();      paused = false;  playing = true;  }
     function pause() {show('start'); paused = true; playing = false;}
     function restart() {hide('start'); paused = false; playing = true;}
-    function lose() { show('start'); setVisualScore(); playing = false; }
-
+    function lose() { saveRecord(); show('start'); setVisualScore(); playing = false; }
     function setVisualScore(n)      { vscore = n || score; invalidateScore(); }
     function setScore(n)            { score = n; setVisualScore(n);  }
     function addScore(n)            { score = score + n;   }
@@ -367,6 +368,20 @@
       }
     }
 
+    function saveRecord() {
+      var record = Number(localStorage.getItem('tetrisRecord')) || 0;
+      if (score > record) {
+        record = score;
+        localStorage.setItem('tetrisRecord', record);
+      }
+      html('record', ("00000" + record).slice(-5));
+    }
+
+    function showRecord() {
+      var record = Number(localStorage.getItem('tetrisRecord')) || 0;
+      html('record', ("00000" + record).slice(-5));
+    }
+
     //-------------------------------------------------------------------------
     // RENDERING
     //-------------------------------------------------------------------------
@@ -449,7 +464,7 @@
     //-------------------------------------------------------------------------
     // FINALLY, lets run the game
     //-------------------------------------------------------------------------
-
+    showRecord();
     run();
 
   </script>
