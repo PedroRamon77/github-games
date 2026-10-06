@@ -12,8 +12,8 @@
     #menu p a { text-decoration: none; color: black; }
     #upcoming { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score    { color: blue; font-weight: bold; vertical-align: middle; }
-    #record   { color: black; font-weight: bold; vertical-align: middle; }
-    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
+    #record   { color: blue; font-weight: bold; vertical-align: middle; }
+    #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
     #stats    { position: absolute; bottom: 0em; right: 1em; }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
@@ -33,6 +33,7 @@
       <p><canvas id="upcoming"></canvas></p>
       <p>score: <span id="score">00000</span></p>
       <p>record: <span id="record">00000</span></p>
+      <p id="new-record"></p>
       <p>rows: <span id="rows">0</span></p>
     </div>
     <canvas id="canvas">
@@ -95,6 +96,7 @@
         current,       // the current piece
         next,          // the next piece
         score,         // the current score
+        record,        // the current record
         vscore,        // the currently displayed score (it catches up to score in small chunks - like a spinning slot machine)
         rows,          // number of completed rows in the current game
         step;          // how long before current piece drops by 1 row
@@ -264,6 +266,7 @@
 
     function reset() {
       dt = 0;
+      html('new-record', '');
       clearActions();
       clearBlocks();
       clearRows();
@@ -369,16 +372,21 @@
     }
 
     function saveRecord() {
-      var record = Number(localStorage.getItem('tetrisRecord')) || 0;
-      if (score > record) {
+      var recordAtual = Number(localStorage.getItem('tetrisRecord')) || 0;
+      if (score > recordAtual) {
         record = score;
         localStorage.setItem('tetrisRecord', record);
+        html('new-record', 'NEW RECORD !!!');
+      }
+      else {
+        record = recordAtual;
+        html('new-record', '');
       }
       html('record', ("00000" + record).slice(-5));
     }
 
     function showRecord() {
-      var record = Number(localStorage.getItem('tetrisRecord')) || 0;
+      record = Number(localStorage.getItem('tetrisRecord')) || 0;
       html('record', ("00000" + record).slice(-5));
     }
 
