@@ -39,6 +39,7 @@
     <canvas id="canvas">
       Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
     </canvas>
+    <div id="gameover" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: red; font-size: 2em; font-weight: bold; text-shadow: 2px 2px 4px black; background: rgba(0,0,0,0.7); padding: 10px 20px; border-radius: 5px;">GAME OVER</div>
   </div>
 
   <script src="stats.js"></script>
@@ -246,10 +247,22 @@
     // GAME LOGIC
     //-------------------------------------------------------------------------
 
-    function play() { hide('start'); reset();      paused = false;  playing = true;  }
-    function pause() {show('start'); paused = true; playing = false;}
-    function restart() {hide('start'); paused = false; playing = true;}
-    function lose() { saveRecord(); show('start'); setVisualScore(); playing = false; }
+    function play() { 
+      hide('start'); 
+      get('gameover').style.display = 'none'; // Esconde a mensagem de Game Over
+      reset();      
+      paused = false;  
+      playing = true;  
+    }
+    function pause() { show('start'); paused = true; playing = false; }
+    function restart() { hide('start'); get('gameover').style.display = 'none'; paused = false; playing = true; }
+    function lose() { 
+      saveRecord(); 
+      show('start'); 
+      get('gameover').style.display = 'block'; // Mostra a mensagem de Game Over no meio da tela
+      setVisualScore(); 
+      playing = false; 
+    }
     function setVisualScore(n)      { vscore = n || score; invalidateScore(); }
     function setScore(n)            { score = n; setVisualScore(n);  }
     function addScore(n)            { score = score + n;   }
