@@ -480,6 +480,15 @@
     }
     return y;
     }
+
+    function drawGhostPiece(ctx, type, x, y, dir) {
+    ctx.save();
+    ctx.globalAlpha = 0.3;
+    eachblock(type, x, y, dir, function(x, y) {
+      drawBlock(ctx, x, y, type.color);
+    });
+    ctx.restore();
+    }
     
     function drawPiece(ctx, type, x, y, dir) {
       eachblock(type, x, y, dir, function(x, y) {
