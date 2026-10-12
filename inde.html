@@ -426,11 +426,13 @@
     }
 
     function drawCourt() {
-      if (invalid.court) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        if (playing)
-          drawPiece(ctx, current.type, current.x, current.y, current.dir);
-        var x, y, block;
+    if (invalid.court) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (playing) {
+        drawGhostPiece(ctx, current.type, current.x, getGhostY(), current.dir); // incluir a peça fantasma
+        drawPiece(ctx, current.type, current.x, current.y, current.dir);
+      }
+      var x, y, block;
         for(y = 0 ; y < ny ; y++) {
           for (x = 0 ; x < nx ; x++) {
             if (block = getBlock(x,y))
@@ -470,6 +472,15 @@
       }
     }
 
+    // peça fantasma
+    function getGhostY() {
+    var y = current.y;
+    while (unoccupied(current.type, current.x, y + 1, current.dir)) {
+      y++;
+    }
+    return y;
+    }
+    
     function drawPiece(ctx, type, x, y, dir) {
       eachblock(type, x, y, dir, function(x, y) {
         drawBlock(ctx, x, y, type.color);
