@@ -13,7 +13,8 @@
     #upcoming { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score    { color: blue; font-weight: bold; vertical-align: middle; }
     #record   { color: blue; font-weight: bold; vertical-align: middle; }
-    #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
+    #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
     #stats    { position: absolute; bottom: 0em; right: 1em; }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
@@ -35,6 +36,8 @@
       <p>record: <span id="record">00000</span></p>
       <p id="new-record"></p>
       <p>rows: <span id="rows">0</span></p>
+      <!-- NOVA LINHA: Botão de Peça Aleatória -->
+      <p><button id="btn-peca-aleatoria" style="width: 100%; padding: 5px; cursor: pointer; margin-top: 10px; font-weight: bold;">Trocar Peça (1x por rodada)</button></p>
     </div>
     <canvas id="canvas">
       Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
@@ -100,7 +103,8 @@
         record,        // the current record
         vscore,        // the currently displayed score (it catches up to score in small chunks - like a spinning slot machine)
         rows,          // number of completed rows in the current game
-        step;          // how long before current piece drops by 1 row
+        step,          // how long before current piece drops by 1 row
+        trocaUtilizadaNestaRodada = false; // NOVA VARIÁVEL: controle de uso do botão por rodada
 
     //-------------------------------------------------------------------------
     // tetris pieces
@@ -205,6 +209,23 @@
     function addEvents() {
       document.addEventListener('keydown', keydown, false);
       window.addEventListener('resize', resize, false);
+
+      // NOVA LÓGICA: Adiciona o evento de clique no botão
+      var btnTroca = get('btn-peca-aleatoria');
+      if (btnTroca) {
+        btnTroca.addEventListener('click', function() {
+          // Verifica se o jogo está rolando e se a troca ainda não foi feita
+          if (playing && !paused && !trocaUtilizadaNestaRodada) {
+            setCurrentPiece(randomPiece());
+            
+            // Desabilita o uso até a próxima rodada
+            trocaUtilizadaNestaRodada = true;
+            this.style.opacity = '0.5';
+            this.style.cursor = 'not-allowed';
+            this.blur(); // Tira o foco do botão para não ativar ao apertar Espaço
+          }
+        });
+      }
     }
 
     function resize(event) {
@@ -286,6 +307,14 @@
       clearScore();
       setCurrentPiece(next);
       setNextPiece();
+
+      // NOVA LÓGICA: Restaura o botão ao reiniciar o jogo
+      trocaUtilizadaNestaRodada = false;
+      var btnTroca = get('btn-peca-aleatoria');
+      if (btnTroca) {
+        btnTroca.style.opacity = '1';
+        btnTroca.style.cursor = 'pointer';
+      }
     }
 
     function update(idt) {
@@ -344,6 +373,15 @@
         setCurrentPiece(next);
         setNextPiece(randomPiece());
         clearActions();
+
+        // NOVA LÓGICA: Restaura o uso do botão quando uma nova peça cai
+        trocaUtilizadaNestaRodada = false;
+        var btnTroca = get('btn-peca-aleatoria');
+        if (btnTroca) {
+          btnTroca.style.opacity = '1';
+          btnTroca.style.cursor = 'pointer';
+        }
+
         if (occupied(current.type, current.x, current.y, current.dir)) {
           lose();
         }
@@ -491,4 +529,4 @@
   </script>
 
 </body>
-</html>
+</html> 
