@@ -14,7 +14,38 @@
     #score    { color: blue; font-weight: bold; vertical-align: middle; }
     #record   { color: blue; font-weight: bold; vertical-align: middle; }
     #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
+<<<<<<< Updated upstream
     #stats    { position: absolute; bottom: 0em; right: 1em; }
+=======
+    #stats      { position: absolute; bottom: 0em; right: 1em; }
+   #gameover { 
+      display: none; 
+      position: absolute; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%); 
+      color: #ff3333; 
+      font-family: 'Helvetica', sans-serif; 
+      font-size: 2em; 
+      font-weight: 900; 
+      text-transform: uppercase; 
+      text-shadow: 0 0 12px rgba(255, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9); 
+      background: rgba(0, 0, 0, 0.85); 
+      padding: 15px 25px; 
+      border-radius: 8px; 
+      border: 2px solid #ff3333; 
+      letter-spacing: 2px; 
+      text-align: center; 
+      z-index: 10; 
+      animation: pulseOver 1.5s infinite ease-in-out; 
+    } 
+
+    @keyframes pulseOver { 
+      0% { transform: translate(-50%, -50%) scale(1); } 
+      50% { transform: translate(-50%, -50%) scale(1.05); } 
+      100% { transform: translate(-50%, -50%) scale(1); } 
+    }
+>>>>>>> Stashed changes
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
     @media screen and (min-width: 500px) and (min-height: 500px)  { #tetris { font-size: 1.25em; width: 450px; } #menu { width: 200px; height: 400px; } #upcoming { width: 100px; height: 100px; } #canvas { width: 200px; height: 400px; } } /* 20px chunks */
