@@ -1,39 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Javascript Tetris</title>
+  <title>JavaScript Tetris</title>
   <style>
-    body        { font-family: Helvetica, sans-serif; }
-    #tetris     { margin: 1em auto; padding: 1em; border: 4px solid black; border-radius: 10px; background-color: #F8F8F8; position: relative; width: fit-content; }
-    #stats      { display: inline-block; vertical-align: top; }
-    #canvas     { display: inline-block; vertical-align: top; background: url(texture.jpg); box-shadow: 10px 10px 10px #999; border: 2px solid #333; }
-    #menu       { display: inline-block; vertical-align: top; position: relative; }
-    #menu p     { margin: 0.5em 0; text-align: center; }
-    #menu p a   { text-decoration: none; color: black; }
-    #upcoming   { display: block; margin: 0 auto; background-color: #E0E0E0; }
-    #score      { color: blue; font-weight: bold; vertical-align: middle; }
-    #record     { color: blue; font-weight: bold; vertical-align: middle; }
-    #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
-    #stats      { position: absolute; bottom: 0em; right: 1em; }
+    :root        { color-scheme: dark; --panel: #111827; --panel-light: #1f2937; --accent: #67e8f9; --value: #facc15; }
+    *            { box-sizing: border-box; }
+    body         { min-height: 100vh; margin: 0; display: grid; place-items: center; font-family: Helvetica, sans-serif; background: radial-gradient(circle at top, #312e81, #111827 65%); color: #f8fafc; }
+    #tetris      { margin: 1em; padding: 1.25em; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; background: rgba(15,23,42,0.88); position: relative; width: fit-content; box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+    #game-layout { display: flex; gap: 1em; align-items: flex-start; }
+    #menu        { display: inline-block; vertical-align: top; position: relative; padding: 0.35em; }
+    #menu p      { margin: 0.65em 0; text-align: center; }
+    #menu p a    { display: block; padding: 0.65em 0.75em; border: 1px solid rgba(103,232,249,0.5); border-radius: 10px; background: linear-gradient(135deg, #0891b2, #2563eb); color: white; font-size: 0.8em; font-weight: bold; text-decoration: none; box-shadow: 0 6px 14px rgba(8,145,178,0.3); transition: transform 0.15s ease, filter 0.15s ease; }
+    #menu p a:hover, #menu p a:focus-visible { filter: brightness(1.15); transform: translateY(-2px); outline: none; }
+    #upcoming    { display: block; margin: 0 auto; border: 2px solid rgba(103,232,249,0.6); border-radius: 8px; background-color: #0f172a; box-shadow: inset 0 0 18px rgba(0,0,0,0.35); }
+    .next-label  { color: #94a3b8; font-size: 0.7em; font-weight: bold; letter-spacing: 0.14em; text-transform: uppercase; }
+    .stat-row    { display: flex; justify-content: space-between; gap: 0.5em; padding: 0.45em 0.6em; border-radius: 7px; background: rgba(255,255,255,0.06); color: #cbd5e1; font-size: 0.8em; text-align: left !important; }
+    #score, #record, #rows { color: var(--value); font-weight: bold; vertical-align: middle; }
+    #new-record { min-height: 1.2em; color: #fb7185; font-weight: bold; font-size: 0.75em; text-align: center; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; }
+    #stats      { position: absolute; bottom: 0.5em; right: 0.5em; }
+    .board       { display: inline-block; vertical-align: top; position: relative; }
+    #canvas      { display: block; background: url(texture.jpg); box-shadow: 0 12px 24px rgba(0,0,0,0.45); border: 3px solid #0f172a; border-radius: 8px; }
     #gameover { 
       display: none; 
       position: absolute; 
       top: 50%; 
       left: 50%; 
       transform: translate(-50%, -50%); 
-      color: #ff3333; 
+      min-width: 75%; 
+      color: #fecaca; 
       font-family: 'Helvetica', sans-serif; 
-      font-size: 2em; 
+      font-size: clamp(1.2em, 5vw, 2em); 
       font-weight: 900; 
       text-transform: uppercase; 
-      text-shadow: 0 0 12px rgba(255, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9); 
-      background: rgba(0, 0, 0, 0.85); 
-      padding: 15px 25px; 
-      border-radius: 8px; 
-      border: 2px solid #ff3333; 
+      text-shadow: 0 0 12px rgba(248,113,113,0.8); 
+      background: rgba(69,10,10,0.9); 
+      padding: 15px 20px; 
+      border-radius: 12px; 
+      border: 2px solid #f87171; 
       letter-spacing: 2px; 
       text-align: center; 
       z-index: 10; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.45); 
       animation: pulseOver 1.5s infinite ease-in-out; 
     } 
 
@@ -42,6 +49,7 @@
       50% { transform: translate(-50%, -50%) scale(1.05); } 
       100% { transform: translate(-50%, -50%) scale(1); } 
     }
+    @media screen and (max-width: 430px) { #game-layout { gap: 0.35em; } #tetris { padding: 0.75em; } }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
     @media screen and (min-width: 500px) and (min-height: 500px)  { #tetris { font-size: 1.25em; width: 450px; } #menu { width: 200px; height: 400px; } #upcoming { width: 100px; height: 100px; } #canvas { width: 200px; height: 400px; } } /* 20px chunks */
@@ -55,21 +63,23 @@
 <body>
 
   <div id="tetris">
+    <div id="game-layout">
     <div id="menu">
       <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
+      <p class="next-label">Next piece</p>
       <p><canvas id="upcoming"></canvas></p>
-      <p>score: <span id="score">00000</span></p>
-      <p>record: <span id="record">00000</span></p>
+      <p class="stat-row"><span>Score</span><span id="score">00000</span></p>
+      <p class="stat-row"><span>Record</span><span id="record">00000</span></p>
       <p id="new-record"></p>
-      <p>rows: <span id="rows">0</span></p>
+      <p class="stat-row"><span>Rows</span><span id="rows">0</span></p>
     </div>
     
-    <!-- Container exclusivo para o canvas e o game over -->
-    <div style="display: inline-block; vertical-align: top; position: relative;">
+    <div class="board">
       <canvas id="canvas">
         Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
       </canvas>
       <div id="gameover">GAME OVER</div>
+    </div>
     </div>
   </div>
 

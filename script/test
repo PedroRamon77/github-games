@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 #
-# Test the app - if the game loads, everything is working!
+# Start the app for a manual smoke test.
 
-# Create symlink to test game
-ln -s inde.html index.html
+set -euo pipefail
 
-# Remove symlink on script exit
-trap "rm index.html" EXIT
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Start app
-script/server
+cd "$PROJECT_DIR"
+"$SCRIPT_DIR/server"
