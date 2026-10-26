@@ -13,6 +13,10 @@
     #upcoming   { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score      { color: blue; font-weight: bold; vertical-align: middle; }
     #record     { color: blue; font-weight: bold; vertical-align: middle; }
+    #controls-dialog { max-width: 24em; border: 2px solid #333; border-radius: 8px; padding: 1.25em; }
+    #controls-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+    #controls-dialog h2 { margin-top: 0; }
+    #controls-dialog li { margin: 0.5em 0; }
     #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
     #stats      { position: absolute; bottom: 0em; right: 1em; }
     #gameover { 
@@ -57,6 +61,7 @@
   <div id="tetris">
     <div id="menu">
       <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
+      <p><button type="button" id="controls-button">Controles</button></p>
       <p><canvas id="upcoming"></canvas></p>
       <p>score: <span id="score">00000</span></p>
       <p>record: <span id="record">00000</span></p>
@@ -72,6 +77,18 @@
       <div id="gameover">GAME OVER</div>
     </div>
   </div>
+
+  <dialog id="controls-dialog" aria-labelledby="controls-title">
+    <h2 id="controls-title">Controles do jogo</h2>
+    <ul>
+      <li><strong>← / →:</strong> move a peça para a esquerda ou para a direita.</li>
+      <li><strong>↑:</strong> gira a peça.</li>
+      <li><strong>↓:</strong> acelera a descida da peça.</li>
+      <li><strong>Barra de espaço:</strong> inicia ou pausa o jogo.</li>
+      <li><strong>Esc:</strong> encerra a partida.</li>
+    </ul>
+    <button type="button" id="close-controls">Fechar</button>
+  </dialog>
 
   <script src="stats.js"></script>
   <script>
@@ -236,6 +253,12 @@
     function addEvents() {
       document.addEventListener('keydown', keydown, false);
       window.addEventListener('resize', resize, false);
+      get('controls-button').addEventListener('click', function() {
+        get('controls-dialog').showModal();
+      });
+      get('close-controls').addEventListener('click', function() {
+        get('controls-dialog').close();
+      });
     }
 
     function resize(event) {
@@ -250,6 +273,9 @@
     }
 
     function keydown(ev) {
+      if (get('controls-dialog').open)
+        return;
+
       var handled = false;
       if (playing) {
         switch(ev.keyCode) {
