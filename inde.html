@@ -654,8 +654,18 @@
 
     function drawBlock(ctx, x, y, color) {
       ctx.fillStyle = color;
-      ctx.fillRect(x*dx, y*dy, dx, dy);
-      ctx.strokeRect(x*dx, y*dy, dx, dy)
+      
+      // Calcula o centro e o raio para desenhar o círculo dentro do espaço do bloco
+      var centerX = (x * dx) + (dx / 2);
+      var centerY = (y * dy) + (dy / 2);
+      var radius = (Math.min(dx, dy) / 2) - 1; // Subtrai 1 para a borda não encostar
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+      ctx.fill();
+      
+      ctx.strokeStyle = 'black';
+      ctx.stroke();
     }
 
     //-------------------------------------------------------------------------
