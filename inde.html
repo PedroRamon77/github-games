@@ -551,12 +551,14 @@
     }
 
     function drawGhostPiece(ctx, type, x, y, dir) {
-    ctx.save();
-    ctx.globalAlpha = 0.3;
-    eachblock(type, x, y, dir, function(x, y) {
-      drawBlock(ctx, x, y, type.color);
-    });
-    ctx.restore();
+      ctx.save();
+      // Pisca conforme o tempo passa
+      var pulse = 0.3 + Math.sin(Date.now() / 100) * 0.2;
+      ctx.globalAlpha = pulse;
+      eachblock(type, x, y, dir, function(x, y) {
+        drawBlock(ctx, x, y, type.color);
+      });
+      ctx.restore();
     }
     
     function drawPiece(ctx, type, x, y, dir) {
