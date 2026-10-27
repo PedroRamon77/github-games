@@ -13,9 +13,9 @@
     #upcoming   { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score      { color: blue; font-weight: bold; vertical-align: middle; }
     #record     { color: blue; font-weight: bold; vertical-align: middle; }
-    #alerta-perigo { display: none; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%; padding: 10px 14px; box-sizing: border-box; border: 2px solid #f59e0b; border-radius: 8px; background: rgba(120, 53, 15, 0.95); color: #fff; font-size: 14px; font-weight: bold; text-align: center; z-index: 5; }
-    #alerta-perigo.nivel-atencao { border-color: #f59e0b; background: rgba(120, 53, 15, 0.95); color: #fef3c7; }
-    #alerta-perigo.nivel-perigo { border-color: #ef4444; background: rgba(127, 29, 29, 0.96); color: #fee2e2; }
+    #alerta-perigo { display: none; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 16px); padding: 8px 12px; box-sizing: border-box; border: none; border-radius: 8px; color: #713f12; font-size: 13px; font-weight: bold; text-align: center; overflow-wrap: anywhere; z-index: 5; }
+    #alerta-perigo.nivel-atencao { color: #facc15; }
+    #alerta-perigo.nivel-perigo {  color: #ef4444; }
     #controls-dialog { max-width: 24em; border: 2px solid #333; border-radius: 8px; padding: 1.25em; }
     #controls-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
     #controls-dialog h2 { margin-top: 0; }
