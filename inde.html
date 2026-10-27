@@ -13,6 +13,9 @@
     #upcoming   { display: block; margin: 0 auto; background-color: #E0E0E0; }
     #score      { color: blue; font-weight: bold; vertical-align: middle; }
     #record     { color: blue; font-weight: bold; vertical-align: middle; }
+    #alerta-perigo { display: none; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%; padding: 10px 14px; box-sizing: border-box; border: 2px solid #f59e0b; border-radius: 8px; background: rgba(120, 53, 15, 0.95); color: #fff; font-size: 14px; font-weight: bold; text-align: center; z-index: 5; }
+    #alerta-perigo.nivel-atencao { border-color: #f59e0b; background: rgba(120, 53, 15, 0.95); color: #fef3c7; }
+    #alerta-perigo.nivel-perigo { border-color: #ef4444; background: rgba(127, 29, 29, 0.96); color: #fee2e2; }
     #controls-dialog { max-width: 24em; border: 2px solid #333; border-radius: 8px; padding: 1.25em; }
     #controls-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
     #controls-dialog h2 { margin-top: 0; }
@@ -75,6 +78,7 @@
         Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
       </canvas>
       <div id="gameover">GAME OVER</div>
+      <div id="alerta-perigo" role="status" aria-live="polite"> CUIDADO! A PILHA ESTÁ ALTA! </div>
     </div>
   </div>
 
@@ -340,6 +344,8 @@
     function setRows(n)             { rows = n; step = Math.max(speed.min, speed.start - (speed.decrement*rows)); invalidateRows(); }
     function addRows(n)             { setRows(rows + n); }
     function getBlock(x,y)          { return (blocks && blocks[x] ? blocks[x][y] : null); }
+    function verificarNivelPerigo() { var maiorAltura = 0; for (var x = 0; x < nx; x++) { for (var y = 0; y < ny; y++) { if (getBlock(x, y)) { var altura = ny - y; if (altura > maiorAltura) maiorAltura = altura; } } } return maiorAltura; }
+    function atualizarAlertaPerigo(){ var alerta = get('alerta-perigo'); if (!alerta) return; if (!playing) { alerta.style.display = 'none'; return; } var altura = verificarNivelPerigo(); alerta.classList.remove('nivel-atencao', 'nivel-perigo'); if (altura >= 15) { alerta.textContent = '🚨 PERIGO! A PILHA ESTÁ MUITO ALTA!'; alerta.classList.add('nivel-perigo'); alerta.style.display = 'block'; } else if (altura >= 11) { alerta.textContent = '⚠️ ATENÇÃO! CUIDADO COM O TOPO!'; alerta.classList.add('nivel-atencao'); alerta.style.display = 'block'; } else { alerta.style.display = 'none'; } }
     function setBlock(x,y,type)     { blocks[x] = blocks[x] || []; blocks[x][y] = type; invalidate(); }
     function clearBlocks()          { blocks = []; invalidate(); }
     function clearActions()         { actions = []; }
@@ -349,6 +355,8 @@
     function reset() {
       dt = 0;
       html('new-record', '');
+      get('alerta-perigo').style.display = 'none';
+      get('alerta-perigo').classList.remove('nivel-atencao', 'nivel-perigo');
       clearActions();
       clearBlocks();
       clearRows();
@@ -508,8 +516,9 @@
               drawBlock(ctx, x, y, block.color);
           }
         }
-        ctx.strokeRect(0, 0, nx*dx - 1, ny*dy - 1); // court boundary
+        ctx.strokeRect(0, 0, nx * dx - 1, ny * dy - 1);
         invalid.court = false;
+        atualizarAlertaPerigo();
       }
     }
 
