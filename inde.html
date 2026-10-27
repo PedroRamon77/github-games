@@ -16,6 +16,7 @@
     #menu p a:hover { text-decoration: underline; }
     #upcoming   { display: block; margin: 0 auto; background-color: #eef2f7; border: 1px solid #b8c2d1; border-radius: 4px; }
     #menu .stat { display: flex; justify-content: space-between; gap: 1em; padding: 0.35em 0.5em; color: #5b6878; border-bottom: 1px solid #e0e5eb; }
+    .stat-icon  { display: inline-block; width: 1.2em; margin-right: 0.25em; color: #245da8; text-align: center; }
     #score, #record, #rows { color: #245da8; font-weight: bold; vertical-align: middle; }
     #controls-button, #close-controls { padding: 0.4em 0.75em; color: #243b64; border: 1px solid #9eacc0; border-radius: 4px; background: #f1f4f8; cursor: pointer; }
     #controls-button:hover, #close-controls:hover { background: #e2e8f0; }
@@ -74,10 +75,10 @@
       <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
       <p><button type="button" id="controls-button">Controles</button></p>
       <p><canvas id="upcoming"></canvas></p>
-      <p class="stat"><span>Score</span><span id="score">00000</span></p>
-      <p class="stat"><span>Record</span><span id="record">00000</span></p>
+      <p class="stat"><span><span class="stat-icon" aria-hidden="true">★</span>Score</span><span id="score">00000</span></p>
+      <p class="stat"><span><span class="stat-icon" aria-hidden="true">🏆</span>Record</span><span id="record">00000</span></p>
       <p id="new-record"></p>
-      <p class="stat"><span>Linhas</span><span id="rows">0</span></p>
+      <p class="stat"><span><span class="stat-icon" aria-hidden="true">▦</span>Linhas</span><span id="rows">0</span></p>
     </div>
     
     <!-- Container exclusivo para o canvas e o game over -->
