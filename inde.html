@@ -19,33 +19,82 @@
     #controls-dialog li { margin: 0.5em 0; }
     #new-record { color: #e60000; font-weight: bold; font-size: 18px; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { color: blue; font-weight: bold; vertical-align: middle; }
     #stats      { position: absolute; bottom: 0em; right: 1em; }
-    #gameover { 
-      display: none; 
-      position: absolute; 
-      top: 50%; 
-      left: 50%; 
-      transform: translate(-50%, -50%); 
-      color: #ff3333; 
-      font-family: 'Helvetica', sans-serif; 
-      font-size: 2em; 
-      font-weight: 900; 
-      text-transform: uppercase; 
-      text-shadow: 0 0 12px rgba(255, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9); 
-      background: rgba(0, 0, 0, 0.85); 
-      padding: 15px 25px; 
-      border-radius: 8px; 
-      border: 2px solid #ff3333; 
-      letter-spacing: 2px; 
-      text-align: center; 
-      z-index: 10; 
-      animation: pulseOver 1.5s infinite ease-in-out; 
-    } 
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-    @keyframes pulseOver { 
-      0% { transform: translate(-50%, -50%) scale(1); } 
-      50% { transform: translate(-50%, -50%) scale(1.05); } 
-      100% { transform: translate(-50%, -50%) scale(1); } 
+    #gameover {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.96);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #ffffff;
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      z-index: 100;
+      box-sizing: border-box;
+      padding: 20px;
+      border-radius: 14px; /* Para acompanhar a borda arredondada do tetris */
     }
+
+    .retro-title {
+      font-size: 1.8em;
+      color: #ff3333;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px rgba(255, 51, 51, 0.9);
+      letter-spacing: 2px;
+      animation: piscarGameOver 1s infinite alternate;
+    }
+
+    @keyframes piscarGameOver {
+      0% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    .retro-info {
+      background: #111111;
+      border: 2px solid #333333;
+      padding: 18px 22px;
+      margin-bottom: 30px;
+      font-size: 0.8em;
+      text-align: left;
+      line-height: 2.2;
+      width: 280px;
+      border-radius: 6px;
+    }
+
+    .retro-info span {
+      float: right;
+      color: #00ffcc;
+    }
+
+    .retro-btn {
+      background: #00ffcc;
+      color: #000000;
+      border: none;
+      padding: 14px 24px;
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      font-size: 0.75em;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
+    }
+
+    .retro-btn:hover {
+      background: #ffffff;
+      transform: scale(1.05);
+    }
+    
+
+    @keyframes pulseOver { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.05); } 100% { transform: translate(-50%, -50%) scale(1); }  }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
     @media screen and (min-width: 500px) and (min-height: 500px)  { #tetris { font-size: 1.25em; width: 450px; } #menu { width: 200px; height: 400px; } #upcoming { width: 100px; height: 100px; } #canvas { width: 200px; height: 400px; } } /* 20px chunks */
@@ -60,6 +109,7 @@
 
   <div id="tetris">
     <div id="menu">
+      <!-- Seu menu lateral normal -->
       <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
       <p><button type="button" id="controls-button">Controles</button></p>
       <p><canvas id="upcoming"></canvas></p>
@@ -69,12 +119,20 @@
       <p>rows: <span id="rows">0</span></p>
     </div>
     
-    <!-- Container exclusivo para o canvas e o game over -->
     <div style="display: inline-block; vertical-align: top; position: relative;">
       <canvas id="canvas">
         Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
       </canvas>
-      <div id="gameover">GAME OVER</div>
+    </div>
+
+    <!-- O GAME OVER AGORA FICA AQUI, COBRINDO O #tetris INTEIRO -->
+    <div id="gameover">
+      <div class="retro-title">GAME OVER</div>
+      <div class="retro-info">
+        <p>SCORE : <span id="final-score">00000</span></p>
+        <p>RECORD: <span id="final-record">00000</span></p>
+      </div>
+      <a href="#" class="retro-btn" onclick="reiniciarJogo(); return false;">JOGAR NOVAMENTE</a>
     </div>
   </div>
 
@@ -328,9 +386,23 @@
     function lose() { 
       saveRecord(); 
       show('start'); 
-      get('gameover').style.display = 'block'; // Fica visível na tela quando perde
+      
+      // Atualiza as pontuações finais na tela cheia
+      get('final-score').innerText = ("00000" + Math.floor(score)).slice(-5);
+      var recordAtual = Number(localStorage.getItem('tetrisRecord')) || 0;
+      get('final-record').innerText = ("00000" + recordAtual).slice(-5);
+
+      // Exibe preenchendo o espaço todo
+      get('gameover').style.display = 'flex'; 
+      
       setVisualScore(); 
       playing = false; 
+    }
+
+    // Função funcional ligada ao botão de reiniciar
+    function reiniciarJogo() {
+      get('gameover').style.display = 'none';
+      play();
     }
     function setVisualScore(n)      { vscore = n || score; invalidateScore(); }
     function setScore(n)            { score = n; setVisualScore(n);  }
