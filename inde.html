@@ -23,39 +23,86 @@
     #controls-dialog { max-width: 24em; border: 1px solid #9eacc0; border-radius: 8px; padding: 1.25em; background: #fff; box-shadow: 0 8px 24px rgba(31, 45, 61, 0.25); }
     #controls-dialog::backdrop { background: rgba(31, 45, 61, 0.55); }
     #controls-dialog h2 { margin-top: 0; color: #243b64; }
-    #alerta-perigo { display: none; position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 90%; padding: 10px 14px; box-sizing: border-box; border: 2px solid #f59e0b; border-radius: 8px; background: rgba(120, 53, 15, 0.95); color: #fff; font-size: 14px; font-weight: bold; text-align: center; z-index: 5; }
-    #alerta-perigo.nivel-atencao { border-color: #f59e0b; background: rgba(120, 53, 15, 0.95); color: #fef3c7; }
-    #alerta-perigo.nivel-perigo { border-color: #ef4444; background: rgba(127, 29, 29, 0.96); color: #fee2e2; }
+    #alerta-perigo { display: none; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: calc(100% - 16px); padding: 8px 6px; box-sizing: border-box; background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 6px; color: #ffffff; font-size: 11px; font-weight: bold; text-align: center; overflow-wrap: anywhere; z-index: 5; }
+    #alerta-perigo.nivel-atencao { background: rgba(120, 80, 0, 0.92); border-color: #facc15; color: #facc15; }
+    #alerta-perigo.nivel-perigo { background: rgba(100, 0, 0, 0.92); border-color: #ef4444; color: #ffffff; }
     #controls-dialog li { margin: 0.5em 0; }
     #new-record { color: #c0392b; font-weight: bold; font-size: 0.8em; text-align: center; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px; animation: piscar 0.8s infinite; } @keyframes piscar { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }    #rows     { font-weight: bold; vertical-align: middle; }
     #stats      { position: absolute; bottom: 0em; right: 1em; }
-    #gameover { 
-      display: none; 
-      position: absolute; 
-      top: 50%; 
-      left: 50%; 
-      transform: translate(-50%, -50%); 
-      color: #ff3333; 
-      font-family: 'Helvetica', sans-serif; 
-      font-size: 2em; 
-      font-weight: 900; 
-      text-transform: uppercase; 
-      text-shadow: 0 0 12px rgba(255, 0, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9); 
-      background: rgba(0, 0, 0, 0.85); 
-      padding: 15px 25px; 
-      border-radius: 8px; 
-      border: 2px solid #ff5f7e;
-      letter-spacing: 2px; 
-      text-align: center; 
-      z-index: 10; 
-      animation: pulseOver 1.5s infinite ease-in-out; 
-    } 
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-    @keyframes pulseOver { 
-      0% { transform: translate(-50%, -50%) scale(1); } 
-      50% { transform: translate(-50%, -50%) scale(1.05); } 
-      100% { transform: translate(-50%, -50%) scale(1); } 
+    #gameover {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.96);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #ffffff;
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      z-index: 100;
+      box-sizing: border-box;
+      padding: 20px;
+      border-radius: 14px; /* Para acompanhar a borda arredondada do tetris */
     }
+
+    .retro-title {
+      font-size: 1.8em;
+      color: #ff3333;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px rgba(255, 51, 51, 0.9);
+      letter-spacing: 2px;
+      animation: piscarGameOver 1s infinite alternate;
+    }
+
+    @keyframes piscarGameOver {
+      0% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    .retro-info {
+      background: #111111;
+      border: 2px solid #333333;
+      padding: 18px 22px;
+      margin-bottom: 30px;
+      font-size: 0.8em;
+      text-align: left;
+      line-height: 2.2;
+      width: 280px;
+      border-radius: 6px;
+    }
+
+    .retro-info span {
+      float: right;
+      color: #00ffcc;
+    }
+
+    .retro-btn {
+      background: #00ffcc;
+      color: #000000;
+      border: none;
+      padding: 14px 24px;
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      font-size: 0.75em;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
+    }
+
+    .retro-btn:hover {
+      background: #ffffff;
+      transform: scale(1.05);
+    }
+
+    @keyframes pulseOver { 0% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -50%) scale(1.05); } 100% { transform: translate(-50%, -50%) scale(1); }  }
     @media screen and (min-width:   0px) and (min-height:   0px)  { #tetris { font-size: 0.75em; width: 250px; } #menu { width: 100px; height: 200px; } #upcoming { width:  50px; height:  50px; } #canvas { width: 100px; height: 200px; } } /* 10px chunks */
     @media screen and (min-width: 400px) and (min-height: 400px)  { #tetris { font-size: 1.00em; width: 350px; } #menu { width: 150px; height: 300px; } #upcoming { width:  75px; height:  75px; } #canvas { width: 150px; height: 300px; } } /* 15px chunks */
     @media screen and (min-width: 500px) and (min-height: 500px)  { #tetris { font-size: 1.25em; width: 450px; } #menu { width: 200px; height: 400px; } #upcoming { width: 100px; height: 100px; } #canvas { width: 200px; height: 400px; } } /* 20px chunks */
@@ -81,14 +128,20 @@
       <p class="stat"><span><span class="stat-icon" aria-hidden="true">▦</span>Linhas</span><span id="rows">0</span></p>
     </div>
     
-    <!-- Container exclusivo para o canvas e o game over -->
     <div style="display: inline-block; vertical-align: top; position: relative;">
       <canvas id="canvas">
         Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
       </canvas>
-      <div id="gameover">GAME OVER</div>
-      <div id="alerta-perigo" role="status" aria-live="polite"> CUIDADO! A PILHA ESTÁ ALTA! </div>
-    </div>
+      </div>
+      <div id="gameover">
+        <div class="retro-title">GAME OVER</div>
+        <div class="retro-info">
+          <p>SCORE : <span id="final-score">00000</span></p>
+          <p>RECORD: <span id="final-record">00000</span></p>
+        </div>
+        <a href="#" class="retro-btn" onclick="reiniciarJogo(); return false;">JOGAR NOVAMENTE</a>
+      </div>
+      <div id="alerta-perigo" role="status" aria-live="polite">CUIDADO! A PILHA ESTÁ ALTA!</div>
   </div>
 
   <dialog id="controls-dialog" aria-labelledby="controls-title">
@@ -338,12 +391,26 @@
       playing = true; 
     }
     
-    function lose() { 
-      saveRecord(); 
-      show('start'); 
-      get('gameover').style.display = 'block'; // Fica visível na tela quando perde
-      setVisualScore(); 
-      playing = false; 
+    function lose() {
+      saveRecord();
+      show('start');
+
+      // Atualiza as pontuações finais na tela cheia
+      get('final-score').innerText = ("00000" + Math.floor(score)).slice(-5);
+      var recordAtual = Number(localStorage.getItem('tetrisRecord')) || 0;
+      get('final-record').innerText = ("00000" + recordAtual).slice(-5);
+
+      // Exibe preenchendo o espaço todo
+      get('gameover').style.display = 'flex';
+
+      setVisualScore();
+      playing = false;
+    }
+
+    // Função funcional ligada ao botão de reiniciar
+    function reiniciarJogo() {
+      get('gameover').style.display = 'none';
+      play();
     }
     function setVisualScore(n)      { vscore = n || score; invalidateScore(); }
     function setScore(n)            { score = n; setVisualScore(n);  }
@@ -569,12 +636,14 @@
     }
 
     function drawGhostPiece(ctx, type, x, y, dir) {
-    ctx.save();
-    ctx.globalAlpha = 0.3;
-    eachblock(type, x, y, dir, function(x, y) {
-      drawBlock(ctx, x, y, type.color);
-    });
-    ctx.restore();
+      ctx.save();
+      // Pisca conforme o tempo passa
+      var pulse = 0.3 + Math.sin(Date.now() / 100) * 0.2;
+      ctx.globalAlpha = pulse;
+      eachblock(type, x, y, dir, function(x, y) {
+        drawBlock(ctx, x, y, type.color);
+      });
+      ctx.restore();
     }
     
     function drawPiece(ctx, type, x, y, dir) {
