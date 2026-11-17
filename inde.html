@@ -350,7 +350,7 @@
           case KEY.RIGHT:  actions.push(DIR.RIGHT); handled = true; break;
           case KEY.UP:     actions.push(DIR.UP);    handled = true; break;
           case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
-          case KEY.ENTER:  hardDrop();              handled = true; break;
+          case KEY.ENTER:  if (!ev.repeat) hardDrop(); handled = true; break; // segurar Enter não derruba várias peças
           case KEY.ESC:    lose();                  handled = true; break;
           case KEY.SPACE:  pause();                 handled = true; break;
         }
