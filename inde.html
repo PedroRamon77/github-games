@@ -119,7 +119,7 @@
     <div id="menu">
       <h1>Neon Tetris</h1>
       <p class="tagline">Stack. Clear. Survive.</p>
-      <p id="start"><a href="javascript:play();">Press Space to Play.</a></p>
+      <p id="start"><a href="javascript:playOrResume();">Press Space to Play.</a></p>
       <p><button type="button" id="controls-button">Controles</button></p>
       <p><canvas id="upcoming"></canvas></p>
       <p class="stat"><span><span class="stat-icon" aria-hidden="true">★</span>Score</span><span id="score">00000</span></p>
@@ -356,13 +356,8 @@
         }
       }
       else if (ev.keyCode == KEY.SPACE) {
-        if(paused) {
-            restart();
-            handled = true;
-          }else{
-            play();
-            handled = true;
-          }
+        playOrResume();
+        handled = true;
       }
       if (handled)
         ev.preventDefault(); // prevent arrow keys from scrolling the page (supported in IE9+ and all other browsers)
@@ -380,7 +375,13 @@
       playing = true;  
     }
 
-    function pause() { 
+    // usado pela tecla Espaço e pelo link "Press Space to Play.": na pausa continua, senão começa uma partida nova
+    function playOrResume() {
+      if (paused) restart();
+      else play();
+    }
+
+    function pause() {
       show('start'); 
       paused = true; 
       playing = false; 
